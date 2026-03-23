@@ -10,13 +10,33 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+
       - name: Unzip project
         run: unzip OTGActivator_v2.zip
+
+      - name: Fix gradlew and download wrapper jar
+        run: |
+          cd OTGActivator
+          cat > gradlew << 'EOF'
+          #!/bin/sh
+          APP_HOME="$(cd "$(dirname "$0")" && pwd)"
+          CLASSPATH="$APP_HOME/gradle/wrapper/gradle-wrapper.jar"
+          if [ -n "$JAVA_HOME" ]; then
+            JAVACMD="$JAVA_HOME/bin/java"
+          else
+            JAVACMD="java"
+          fi
+          exec "$JAVACMD" -classpath "$CLASSPATH" org.gradle.wrapper.GradleWrapperMain "$@"
+          EOF
+          chmod +x gradlew
+          curl -L "https://github.com/gradle/gradle/raw/v8.4.0/gradle/wrapper/gradle-wrapper.jar" \
+               -o gradle/wrapper/gradle-wrapper.jar
+
       - name: Build APK
         run: |
           cd OTGActivator
-          chmod +x gradlew
           ./gradlew assembleDebug
+
       - uses: actions/upload-artifact@v4
         with:
           name: OTGActivator-debug

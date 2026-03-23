@@ -20,4 +20,4 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: OTGActivator-debug
-          path: OTGActivator/app/buil
+          path: OTGActivator/app/build/outputs/apk/debug/app-debug.apk

@@ -12,7 +12,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Unzip project
-        run: unzip OTGActivator_v2.zip
+        run: unzip OTGActivator_v3.zip
 
       - name: Fix gradlew and download wrapper jar
         run: |
